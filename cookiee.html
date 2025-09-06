@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cookies Consent</title>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+  <link rel="stylesheet" href="css/cookiee.css">
+  
+</head>
+<body>
+
+
+  <div class="cookie-container" id="cookiePopup">
+    <div class="cookie-box">
+      <i class="fas fa-cookie-bite"></i>
+      <h2>Cookie Consent</h2>
+    </div>
+
+    <div class="cookie-text">
+      <p>
+        We use cookies to enhance site performance, analyze traffic, and provide you with a better experience. 
+        <a href="contents/PDF/privacy policy.pdf" target="_blank">Read More...</a>
+      </p>
+    </div>
+
+    <div class="cta">
+      <button class="ctas" id="acceptBtn">Got it</button>
+      <button class="ctas" id="declineBtn">Decline</button>
+    </div>
+
+ 
+
+  </div>
+  <button id="undoBtn" class="undo-btn" style="display:none;">Undo Cookie Choice</button>
+
+
+
+
+<script>
+  const cookieContainer = document.querySelector(".cookie-container");
+  const acceptBtn = document.querySelector("#acceptBtn");
+  const declineBtn = document.querySelector("#declineBtn");
+  const undoBtn = document.querySelector("#undoBtn");
+
+  // On page load
+  window.addEventListener("load", () => {
+    const choice = localStorage.getItem("cookieChoice");
+    const undoShown = localStorage.getItem("undoShown");
+
+    if (!choice) {
+      cookieContainer.classList.add("show");
+      undoBtn.style.display = "none"; // no undo until choice
+    } else {
+      cookieContainer.classList.remove("show");
+
+      // ✅ Show Undo only if it hasn't been shown before
+      if (!undoShown) {
+        undoBtn.style.display = "block";
+      } else {
+        undoBtn.style.display = "none";
+      }
+    }
+  });
+
+  // Accept
+  acceptBtn.addEventListener("click", () => {
+    localStorage.setItem("cookieChoice", "accepted");
+    cookieContainer.classList.remove("show");
+    showUndoOnce();
+  });
+
+  // Decline
+  declineBtn.addEventListener("click", () => {
+    localStorage.setItem("cookieChoice", "declined");
+    cookieContainer.classList.remove("show");
+    showUndoOnce();
+  });
+
+  // Undo button
+  undoBtn.addEventListener("click", () => {
+    localStorage.removeItem("cookieChoice"); // reset choice
+    localStorage.setItem("undoShown", "true"); // ✅ mark undo as used
+    cookieContainer.classList.add("show");   // show popup again
+    undoBtn.style.display = "none";          // hide permanently
+  });
+
+  // Helper: show undo only once
+  function showUndoOnce() {
+    if (!localStorage.getItem("undoShown")) {
+      undoBtn.style.display = "block"; // show undo
+    }
+  }
+</script>
+
+
+
+
+
+</body>
+</html>
